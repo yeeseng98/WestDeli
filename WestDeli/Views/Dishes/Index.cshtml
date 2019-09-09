@@ -4,7 +4,6 @@
     ViewData["Title"] = "Index";
 }
 <head>
-    <title>Pizza - Free Bootstrap 4 Template by Colorlib</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -14,19 +13,13 @@
 
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
-
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
-
     <link rel="stylesheet" href="css/aos.css">
-
     <link rel="stylesheet" href="css/ionicons.min.css">
-
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="css/jquery.timepicker.css">
-
-
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
@@ -87,38 +80,27 @@
             <div class="row no-gutters d-flex">
                 @foreach (var item in Model)
                 {
+                    string imageString = item.ImgLink;
                     <div class="col-lg-4 d-flex ftco-animate">
                         <div class="services-wrap d-flex">
-                            <a href="#" class="img" style="background-image: url(images/pizza-1.jpg);"></a>
+                            <a href="#" class="img" style="background-image: url(@imageString), url(images/pizza-1.jpg);"></a>
                             <div class="text p-4">
                                 <h3>@Html.DisplayFor(modelItem => item.DishName)</h3>
                                 <p>@Html.DisplayFor(modelItem => item.Description)</p>
-                                <p class="price"><span>@Html.DisplayFor(modelItem => item.Price)</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Order</a></p>
+                                <p class="price">
+                                    <span>@Html.DisplayFor(modelItem => item.Price)</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Order</a>
+                                    &nbsp;&nbsp;
+                                    <a asp-action="Edit" asp-route-id="@item.ID">
+                                        <span class="glyphicon glyphicon-pencil"></span>
+                                    </a>
+                                    &nbsp;&nbsp;
+                                    <a asp-action="Delete" asp-route-id="@item.ID">
+                                        <span class="glyphicon glyphicon-remove"></span>
+                                    </a>
+                                </p>
                             </div>
                         </div>
                     </div>
-                    @*<tr>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.DishName)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Price)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.PrepTime)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Category)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Description)
-                            </td>
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
-                                <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
-                                <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
-                            </td>
-                        </tr>*@
                 }
             </div>
         </div>
@@ -144,5 +126,5 @@
 </body>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create"><span class="glyphicon glyphicon-plus"></span>Create New</a>
 </p>
