@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using WestDeli.Models;
+using Microsoft.AspNetCore.Http;
+using WestDeli.Helpers;
 
 namespace WestDeli.Controllers
 {
@@ -12,6 +14,16 @@ namespace WestDeli.Controllers
     {
         public IActionResult Index()
         {
+            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
+            {
+                ViewBag.user = HttpHelper.HttpContext.Session.GetString("currentUser");
+            }
+
+            if (HttpHelper.HttpContext.Session.GetString("role") != null)
+            {
+                ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
+            }
+
             return View();
         }
 
@@ -73,6 +85,7 @@ namespace WestDeli.Controllers
                 TablesController table = new TablesController();
 
                 if (table.GetUser(user.Username, user.Password)) {
+                    table.UpdateLastLogin(user.Username, user.Password);
                     return RedirectToAction("Index", "Dishes");
                 }
                 else
@@ -81,6 +94,13 @@ namespace WestDeli.Controllers
                 }
             }
             return View();
+        }
+
+        public async Task<IActionResult> Logout()
+        {
+            HttpHelper.HttpContext.Session.Clear();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

@@ -10,12 +10,15 @@ using Microsoft.EntityFrameworkCore;
 using WestDeli.Controllers;
 using WestDeli.Models;
 using System.Diagnostics;
+using WestDeli.Helpers;
 
 namespace WestDeli.Views.Dishes
 {
     public class DishesController : Controller
     {
         private readonly WestDeliContext _context;
+
+        private string role = "";
 
         public DishesController(WestDeliContext context)
         {
@@ -25,12 +28,32 @@ namespace WestDeli.Views.Dishes
         // GET: Dishes
         public async Task<IActionResult> Index()
         {
+            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
+            {
+                ViewBag.user = HttpHelper.HttpContext.Session.GetString("currentUser");
+            }
+
+            if (HttpHelper.HttpContext.Session.GetString("role") != null)
+            {
+                ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
+            }
             return View(await _context.Dish.ToListAsync());
         }
 
         // GET: Dishes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+
+            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
+            {
+                ViewBag.user = HttpHelper.HttpContext.Session.GetString("currentUser");
+            }
+
+            if (HttpHelper.HttpContext.Session.GetString("role") != null)
+            {
+                ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -59,7 +82,17 @@ namespace WestDeli.Views.Dishes
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,DishName,Price,PrepTime,Category,Description")] Dish dish)
         {
-            if (ModelState.IsValid)
+            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
+            {
+                ViewBag.user = HttpHelper.HttpContext.Session.GetString("currentUser");
+            }
+
+            if (HttpHelper.HttpContext.Session.GetString("role") != null)
+            {
+                ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
+            }
+
+            if (ModelState.IsValid && role == "Admin")
             {
                 _context.Add(dish);
                 await _context.SaveChangesAsync();
@@ -71,6 +104,16 @@ namespace WestDeli.Views.Dishes
         // GET: Dishes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
+            {
+                ViewBag.user = HttpHelper.HttpContext.Session.GetString("currentUser");
+            }
+
+            if (HttpHelper.HttpContext.Session.GetString("role") != null)
+            {
+                ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -91,12 +134,22 @@ namespace WestDeli.Views.Dishes
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("ID,DishName,Price,PrepTime,Category,Description")] Dish dish)
         {
+            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
+            {
+                ViewBag.user = HttpHelper.HttpContext.Session.GetString("currentUser");
+            }
+
+            if (HttpHelper.HttpContext.Session.GetString("role") != null)
+            {
+                ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
+            }
+
             if (id != dish.ID)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && role == "Admin")
             {
                 try
                 {
@@ -122,6 +175,16 @@ namespace WestDeli.Views.Dishes
         // GET: Dishes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
+            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
+            {
+                ViewBag.user = HttpHelper.HttpContext.Session.GetString("currentUser");
+            }
+
+            if (HttpHelper.HttpContext.Session.GetString("role") != null)
+            {
+                ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
+            }
+
             if (id == null)
             {
                 return NotFound();
@@ -139,12 +202,26 @@ namespace WestDeli.Views.Dishes
 
         // POST: Dishes/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var dish = await _context.Dish.FindAsync(id);
-            _context.Dish.Remove(dish);
-            await _context.SaveChangesAsync();
+            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
+            {
+                ViewBag.user = HttpHelper.HttpContext.Session.GetString("currentUser");
+            }
+
+            if (HttpHelper.HttpContext.Session.GetString("role") != null)
+            {
+                ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
+            }
+
+            if (role == "Admin")
+            {
+                var dish = await _context.Dish.FindAsync(id);
+                _context.Dish.Remove(dish);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
             return RedirectToAction(nameof(Index));
         }
 
@@ -163,7 +240,6 @@ namespace WestDeli.Views.Dishes
             //get the temporary file path
             var filepath = Path.GetTempFileName();
 
-            int i = 1; string contents = "";
             //to read file by file
             foreach (var FormFile in files)
             {

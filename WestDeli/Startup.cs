@@ -13,6 +13,7 @@ using WestDeli.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WestDeli.Models;
+using WestDeli.Helpers;
 
 namespace WestDeli
 {
@@ -28,21 +29,10 @@ namespace WestDeli
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDistributedMemoryCache();
-
-            services.AddSession(options =>
-            {
-                // Set a short timeout for easy testing.
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.Cookie.HttpOnly = true;
-                // Make the session cookie essential
-                options.Cookie.IsEssential = true;
-            });
-
             services.Configure<CookiePolicyOptions>(options =>
             {
                 // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
+                options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
@@ -52,10 +42,20 @@ namespace WestDeli
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
             services.AddDbContext<WestDeliContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("WestDeliContext")));
+
+            services.AddMvc()
+                .AddSessionStateTempDataProvider();
+            //services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".WestDeli.Session";
+                options.IdleTimeout = TimeSpan.FromHours(20);
+            });
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,14 +72,12 @@ namespace WestDeli
                 app.UseHsts();
             }
 
-            app.UseSession();
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseAuthentication();
-
+            app.UseSession();
+            HttpHelper.Configure(app.ApplicationServices.GetRequiredService<IHttpContextAccessor>());
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

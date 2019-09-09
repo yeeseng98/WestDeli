@@ -2,93 +2,212 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
-    <ol class="carousel-indicators">
-        <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-        <li data-target="#myCarousel" data-slide-to="1"></li>
-        <li data-target="#myCarousel" data-slide-to="2"></li>
-    </ol>
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="~/images/banner1.svg" alt="ASP.NET" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how to build ASP.NET apps that can run anywhere.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525028&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner2.svg" alt="Visual Studio" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    There are powerful new features in Visual Studio for building modern web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525030&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-        <div class="item">
-            <img src="~/images/banner3.svg" alt="Microsoft Azure" class="img-responsive" />
-            <div class="carousel-caption" role="option">
-                <p>
-                    Learn how Microsoft's Azure cloud platform allows you to build, deploy, and scale web apps.
-                    <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkID=525027&clcid=0x409">
-                        Learn More
-                    </a>
-                </p>
-            </div>
-        </div>
-    </div>
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-</div>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/animate.css">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/css/magnific-popup.css">
+    <link rel="stylesheet" href="~/css/aos.css">
+    <link rel="stylesheet" href="~/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="~/css/jquery.timepicker.css">
+    <link rel="stylesheet" href="~/css/flaticon.css">
+    <link rel="stylesheet" href="~/css/icomoon.css">
+    <link rel="stylesheet" href="~/css/style.css">
+</head>
+<body>
 
-<div class="row">
-    <div class="col-md-3">
-        <h2>Application uses</h2>
-        <ul>
-            <li>Sample pages using ASP.NET Core MVC</li>
-            <li>Theming using <a href="https://go.microsoft.com/fwlink/?LinkID=398939">Bootstrap</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>How to</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398600">Add a Controller and View</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699315">Manage User Secrets using Secret Manager.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699316">Use logging to log a message.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699317">Add packages using NuGet.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699319">Target development, staging or production environment.</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Overview</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=518008">Conceptual overview of what is ASP.NET Core</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=699320">Fundamentals of ASP.NET Core such as Startup and middleware.</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398602">Working with Data</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkId=398603">Security</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699321">Client side development</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699322">Develop on different platforms</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=699323">Read more on the documentation site</a></li>
-        </ul>
-    </div>
-    <div class="col-md-3">
-        <h2>Run &amp; Deploy</h2>
-        <ul>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517851">Run your app</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=517853">Run tools such as EF migrations and more</a></li>
-            <li><a href="https://go.microsoft.com/fwlink/?LinkID=398609">Publish to Microsoft Azure Web Apps</a></li>
-        </ul>
-    </div>
-</div>
+    <section class="home-slider owl-carousel img" style="background-image: url(/images/bg_1.jpg);">
+
+        <div class="slider-item" style="background-image: url(/images/bg_3.jpg);">
+            <div class="overlay"></div>
+            <div class="container">
+                <div class="row slider-text justify-content-center align-items-center">
+
+                    <div class="col-md-7 col-sm-12 text-center ftco-animate">
+                        <h1 class="mb-3 mt-5 bread">WESTERN DELI</h1>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="ftco-intro">
+        <div class="container-wrap">
+            <div class="wrap d-md-flex">
+                <div class="info">
+                    <div class="row no-gutters">
+                        <div class="col-md-4 d-flex ftco-animate">
+                            <div class="icon"><span class="icon-phone"></span></div>
+                            <div class="text">
+                                <h3>0189104878</h3>
+                                <p>Contact Manager</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex ftco-animate">
+                            <div class="icon"><span class="icon-my_location"></span></div>
+                            <div class="text">
+                                <h3>1/2 Pusat Bandar Puchong</h3>
+                                <p>Puchong, 47160 Selangor</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex ftco-animate">
+                            <div class="icon"><span class="icon-clock-o"></span></div>
+                            <div class="text">
+                                <h3>Open Monday-Friday</h3>
+                                <p>10:00am - 12:00am</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="social d-md-flex pl-md-5 p-4 align-items-center">
+                    <ul class="social-icon">
+                        <li class="ftco-animate"><span class="glyphicon glyphicon-usd"></span></li>
+                        <li class="ftco-animate"><span class="glyphicon glyphicon-cutlery"></span>/li>
+                        <li class="ftco-animate"><span class="glyphicon glyphicon-heart-empty"></span></li>
+                    </ul>
+                </div>
+            </div>
+         </div>
+    </section>
+
+    <section class="ftco-about d-md-flex">
+        <div class="one-half img" style="background-image: url(/images/about.jpg);"></div>
+        <div class="one-half ftco-animate">
+            <div class="heading-section ftco-animate ">
+                <h2 class="mb-4">Selamat Datang Ke <span class="flaticon-pizza">Western</span> Deli</h2>
+            </div>
+            <div>
+                <p>
+                    Western Deli is a place of gastronomic refuge, with an ambience of renaissance interior that will bring your senses away from the hustling and bustling of mid-town Puchong. Enjoy a treat of delicacies of “low price, great food” that awaits your every visit.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="ftco-section">
+        <div class="container">
+            <div class="row justify-content-center mb-5 pb-3">
+                <div class="col-md-12 heading-section ftco-animate text-center">
+                    <h2 class="mb-4">Our Chef</h2>
+                    <p class="flip"><span class="deg1"></span><span class="deg2"></span><span class="deg3"></span></p>
+                    <p class="mt-5">Meet our amazing Malaysian chefs that has been serving scrumptious food for over decades.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 d-flex mb-sm-4 ftco-animate">
+                    <div class="staff">
+                        <div class="img mb-4" style="background-image: url(/images/person_1.png);"></div>
+                        <div class="info text-center">
+                            <h3><a href="teacher-single.html">Polodro Donno</a></h3>
+                            <span class="position">Sous Chef</span>
+                            <div class="text">
+                                <p>Chef Polodro Donno was born in Brittany, France. He first obtained his professional certificates, C.A.P. and B.E.P., from Saint Ivy College in Pontivy, Brittany, France in 1987. He then proceeded to get the Professional Advanced Level in Food and Beverages at Saint Marc College in Trégunc, Brittany, France. Finally, he graduated with a Diploma, E.S.C.F., from FERRANDI School which is affiliated to the Paris Ile-de-France, Regional Chamber of Commerce and Industry.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 d-flex mb-sm-4 ftco-animate">
+                    <div class="staff">
+                        <div class="img mb-4" style="background-image: url(/images/person_2.png);"></div>
+                        <div class="info text-center">
+                            <h3><a href="teacher-single.html">Mavid Dorris</a></h3>
+                            <span class="position">Head Chef</span>
+                            <div class="text">
+                                <p>With a rural upbringing, food from land and sea has always been a part of Chef Mavid’s life. As a young teenager he decided to follow his passion and began training as an apprentice at a leading Birmingham hotel, working and attending college to develop his skills over the next 5 years.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 d-flex mb-sm-4 ftco-animate">
+                    <div class="staff">
+                        <div class="img mb-4" style="background-image: url(/images/person_3.png);"></div>
+                        <div class="info text-center">
+                            <h3><a href="teacher-single.html">Dylvain Subreau</a></h3>
+                            <span class="position">R&D Chef</span>
+                            <div class="text">
+                                <p>Upon gaining his professional certificates from the Centre de Formation d’Apprentissage in St. Germain de Lesignan in 1991, Chef Dylvain spent fourteen years honing his craft and mastering the arts of French cuisine at the Grandes Maisons area in Paris, where many Michelin-starred restaurants and hotels are located, including 3 Michelin-star La Tour d’Argent, 2 Michelin-star Les Ambassadeurs, 1 Michelin-star Prunier and the world-renowned 2 Michelin-star Hotel de Crillion.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="ftco-counter ftco-bg-dark img" id="section-counter" style="background-image: url(/images/bg_2.jpg);" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate">
+                            <div class="block-18 text-center">
+                                <div class="text">
+                                    <div class="icon"><span class="flaticon-pizza-1"></span></div>
+                                    <strong class="number" data-number="87">0</strong>
+                                    <span>GrabFood Rating</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate">
+                            <div class="block-18 text-center">
+                                <div class="text">
+                                    <div class="icon"><span class="flaticon-medal"></span></div>
+                                    <strong class="number" data-number="3">0</strong>
+                                    <span>Number of Awards</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate">
+                            <div class="block-18 text-center">
+                                <div class="text">
+                                    <div class="icon"><span class="flaticon-laugh"></span></div>
+                                    <strong class="number" data-number="17362">0</strong>
+                                    <span>Happy Customer</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-3 d-flex justify-content-center counter-wrap ftco-animate">
+                            <div class="block-18 text-center">
+                                <div class="text">
+                                    <div class="icon"><span class="flaticon-chef"></span></div>
+                                    <strong class="number" data-number="15">0</strong>
+                                    <span>Staff</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- loader -->
+    <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" /><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
+
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="~/js/jquery.easing.1.3.js"></script>
+    <script src="~/js/jquery.waypoints.min.js"></script>
+    <script src="~/js/jquery.stellar.min.js"></script>
+    <script src="~/js/owl.carousel.min.js"></script>
+    <script src="~/js/jquery.magnific-popup.min.js"></script>
+    <script src="~/js/aos.js"></script>
+    <script src="~/js/jquery.animateNumber.min.js"></script>
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <script src="~/js/jquery.timepicker.min.js"></script>
+    <script src="~/js/scrollax.min.js"></script>
+    <script src="~/js/main.js"></script>
+</body>

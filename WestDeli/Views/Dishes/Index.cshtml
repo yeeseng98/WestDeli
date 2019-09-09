@@ -90,13 +90,16 @@
                                 <p class="price">
                                     <span>@Html.DisplayFor(modelItem => item.Price)</span> <a href="#" class="ml-2 btn btn-white btn-outline-white">Order</a>
                                     &nbsp;&nbsp;
-                                    <a asp-action="Edit" asp-route-id="@item.ID">
-                                        <span class="glyphicon glyphicon-pencil"></span>
-                                    </a>
-                                    &nbsp;&nbsp;
-                                    <a asp-action="Delete" asp-route-id="@item.ID">
-                                        <span class="glyphicon glyphicon-remove"></span>
-                                    </a>
+                                    @if (ViewBag.role == "Admin")
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.ID">
+                                            <span class="glyphicon glyphicon-pencil"></span>
+                                        </a>
+                                        <span>&nbsp; &nbsp;</span>
+                                        <a asp-action="Delete" asp-route-id="@item.ID">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    }
                                 </p>
                             </div>
                         </div>

@@ -10,6 +10,8 @@ using Microsoft.WindowsAzure.Storage.Table;
 using Microsoft.WindowsAzure.Storage.Auth;
 using WestDeli.Models;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
+using WestDeli.Helpers;
 
 namespace WestDeli.Controllers
 {
@@ -32,20 +34,6 @@ namespace WestDeli.Controllers
             return storageaccount;
         }
 
-        ////create table using the code
-        //public ActionResult CreateTable()
-        //{
-        //    CloudStorageAccount storage = addconnection();
-        //    //refer which table/ create which table
-        //    CloudTableClient tableclient = storage.CreateCloudTableClient();
-        //    CloudTable table = tableclient.GetTableReference("TestTable");
-        //    ViewBag.result = table.CreateIfNotExistsAsync().Result;
-        //    ViewBag.TableName = table.Name;
-
-        //    return View();
-        //}
-
-        //method to insert the single entities to the table storage
         public ActionResult AddUser(UserEntity user)
         {
             UserEntity newUser = new UserEntity(user.Username, user.Password);
@@ -86,39 +74,29 @@ namespace WestDeli.Controllers
 
         }
 
-        ////method to insert multiple data in one time
-        //public ActionResult AddMultiEntity()
-        //{
-        //    CloudStorageAccount storage = addconnection();
-        //    //refer which table/ create which table
-        //    CloudTableClient tableclient = storage.CreateCloudTableClient();
-        //    CloudTable table = tableclient.GetTableReference("TestTable");
+        public ActionResult UpdateLastLogin(string partitionKey, string rowKey)
+        {
+            CloudStorageAccount storage = addconnection();
+            //refer which table/ create which table
+            CloudTableClient tableclient = storage.CreateCloudTableClient();
+            CloudTable table = tableclient.GetTableReference("UserTable");
 
-        //    UserEntity customer1 = new UserEntity("Smith", "Jeff");
-        //    customer1.email = "Jeff@gmail.com";
+            TableOperation retrieve = TableOperation.Retrieve<UserEntity>(partitionKey, rowKey);
 
-        //    UserEntity customer2 = new UserEntity("Smith", "Ben");
-        //    customer2.email = "ben@gmail.com";
+            TableResult result = table.ExecuteAsync(retrieve).Result;
 
-        //    try
-        //    {
-        //        IList<TableResult> results;
+            UserEntity user = (UserEntity)result.Result;
 
-        //        //run the multiple process using batch operation
-        //        TableBatchOperation batch = new TableBatchOperation();
-        //        batch.Insert(customer1);
-        //        batch.Insert(customer2);
+            user.LastLogin = DateTime.Now.ToString();
 
-        //        results = table.ExecuteBatchAsync(batch).Result;
-        //        return View(results);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ViewBag.result = 101;
-        //        ViewBag.Message = "Error: Unable to insert all data";
-        //        return View();
-        //    }
-        //}
+            if (result != null)
+            {
+                TableOperation update = TableOperation.Replace(user);
+
+                table.ExecuteAsync(update);
+            }
+            return View();
+        }
 
         public Boolean GetUser(string username, string password)
         {
@@ -136,15 +114,17 @@ namespace WestDeli.Controllers
 
                 if (entity != null)
                 {
+                    HttpHelper.HttpContext.Session.SetString("currentUser", entity.Username);
+                    HttpHelper.HttpContext.Session.SetString("role", entity.Role);
+
                     ViewBag.TableName = table.Name;
                     ViewBag.result = retrievedResult.HttpStatusCode; //status of your process = 204
                     return true;
                 }
-
-                return false;
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex);
                 ViewBag.TableName = table.Name;
                 ViewBag.result = 101;
             }
