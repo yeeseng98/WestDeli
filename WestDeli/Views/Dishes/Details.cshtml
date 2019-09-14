@@ -4,45 +4,123 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Nothing+You+Could+Do" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/animate.css">
+    <link rel="stylesheet" href="~/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/css/magnific-popup.css">
+    <link rel="stylesheet" href="~/css/aos.css">
+    <link rel="stylesheet" href="~/css/ionicons.min.css">
+    <link rel="stylesheet" href="~/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="~/css/jquery.timepicker.css">
+    <link rel="stylesheet" href="~/css/flaticon.css">
+    <link rel="stylesheet" href="~/css/icomoon.css">
+    <link rel="stylesheet" href="~/css/style.css">
+</head>
+@{
+    int portion;
+}
+<body>
+    <div>
+        <a href="#" class="img" style="background-image: url(@Model.ImgLink), url(images/pizza-1.jpg);"></a>
+        <h4>
+            @Model.DishName
+        </h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Price)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Price)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.PrepTime)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.PrepTime)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Category)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Category)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt>
+                Portions
+            </dt>
+            <dd>
+                <form method="post" enctype="multipart/form-data"
+                      asp-action="addToCart">
+                    <div class="form-group">
+                        <input type="hidden" name="Id" value="@Model.ID">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="DishName" value="@Model.DishName">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="Price" value="@Model.Price">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="PrepTime" value="@Model.PrepTime">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="Category" value="@Model.Category">
+                    </div>
+                    @if (ViewBag.user != null)
+                    {
+                    <div class="form-group">
+                        <input type="number" name="portion" value="1" min="1" max="10" onkeydown="return false">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Add to Cart" class="ml-2 btn btn-white btn-outline-white" />
+                    </div>
+                    }
+                    else  {
+                    <br>
+                    <span class="text-danger">
+                        Please log in to order this dish.
+                    </span>
+                    }
+                </form>
+            </dd>
+        </dl>
+        <br>
+    </div>
+
+</body>
+
+<div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" /><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
 
 <div>
-    <h4>Dish</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.DishName)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.DishName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.PrepTime)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.PrepTime)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Category)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
+    <a asp-action="Index">Back to Menu</a>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.ID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+<script src="~/js/jquery.min.js"></script>
+<script src="~/js/jquery-migrate-3.0.1.min.js"></script>
+<script src="~/js/popper.min.js"></script>
+<script src="~/js/bootstrap.min.js"></script>
+<script src="~/js/jquery.easing.1.3.js"></script>
+<script src="~/js/jquery.waypoints.min.js"></script>
+<script src="~/js/jquery.stellar.min.js"></script>
+<script src="~/js/owl.carousel.min.js"></script>
+<script src="~/js/jquery.magnific-popup.min.js"></script>
+<script src="~/js/aos.js"></script>
+<script src="~/js/jquery.animateNumber.min.js"></script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script src="~/js/jquery.timepicker.min.js"></script>
+<script src="~/js/scrollax.min.js"></script>
+<script src="~/js/main.js"></script>

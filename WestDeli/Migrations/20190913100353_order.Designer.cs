@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WestDeli.Models;
 
 namespace WestDeli.Migrations
 {
     [DbContext(typeof(WestDeliContext))]
-    partial class WestDeliContextModelSnapshot : ModelSnapshot
+    [Migration("20190913100353_order")]
+    partial class order
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,8 +59,7 @@ namespace WestDeli.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<string>("Identifier")
-                        .IsRequired();
+                    b.Property<int>("Identifier");
 
                     b.Property<int>("Portion");
 
@@ -66,8 +67,7 @@ namespace WestDeli.Migrations
 
                     b.Property<int>("Price");
 
-                    b.Property<string>("Username")
-                        .IsRequired();
+                    b.Property<int>("Username");
 
                     b.HasKey("ID");
 

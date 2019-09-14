@@ -116,6 +116,7 @@ namespace WestDeli.Controllers
                 {
                     HttpHelper.HttpContext.Session.SetString("currentUser", entity.Username);
                     HttpHelper.HttpContext.Session.SetString("role", entity.Role);
+                    HttpHelper.HttpContext.Session.SetString("identifier", entity.Password);
 
                     ViewBag.TableName = table.Name;
                     ViewBag.result = retrievedResult.HttpStatusCode; //status of your process = 204

@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -66,6 +67,7 @@ namespace WestDeli.Views.Dishes
                 return NotFound();
             }
 
+            ViewBag.portionCount = 1;
             return View(dish);
         }
 
@@ -282,5 +284,31 @@ namespace WestDeli.Views.Dishes
 
             return View(dish);
         }
+
+        [HttpPost, ActionName("addToCart")]
+        public async Task<IActionResult> addToCart(string Id, string DishName, int Price, int PrepTime, string Category, int portion)
+        {
+            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
+            {
+                String username = HttpHelper.HttpContext.Session.GetString("currentUser");
+                String identifier = HttpHelper.HttpContext.Session.GetString("identifier");
+                OrderObject odrObj = new OrderObject();
+                odrObj.DishName = DishName;
+                odrObj.Category = Category;
+                odrObj.Price = Price;
+                odrObj.Portion = portion;
+                odrObj.PrepTime = PrepTime;
+                odrObj.Username = username;
+                odrObj.Identifier = identifier;
+
+                OrderObjectsController OControls = new OrderObjectsController(_context);
+                await OControls.addOrder(odrObj);
+
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View();
+        }
+
     }
 }
