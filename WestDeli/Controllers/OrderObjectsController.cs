@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -39,7 +40,7 @@ namespace WestDeli.Views
         }
 
         // GET: OrderObjects
-        public async Task<IActionResult> Finalize()
+        public async Task<IActionResult> Finalize(int tprice, int tprepTime)
         {
             if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
             {
@@ -50,6 +51,15 @@ namespace WestDeli.Views
             {
                 ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
             }
+
+            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
+            {
+                ViewBag.username = HttpHelper.HttpContext.Session.GetString("currentUser");
+            }
+
+            ViewBag.tprice = tprice;
+
+            ViewBag.tprepTime = tprepTime;
 
             return View();
         }
@@ -217,5 +227,47 @@ namespace WestDeli.Views
         {
             return _context.OrderObject.Any(e => e.ID == id);
         }
+
+        [ActionName("submitOrder")]
+        public async Task<IActionResult> submitOrder(string tprice, int tprepTime, string address)
+        {
+            string username = HttpHelper.HttpContext.Session.GetString("currentUser");
+            string identifier = HttpHelper.HttpContext.Session.GetString("identifier");
+
+            Transaction newTrans = new Transaction();
+
+            newTrans.ID = username + identifier + DateTime.Now.ToString("MM-dd-yyyy hh:mm:ss");
+            newTrans.Username = username;
+            newTrans.Identifier = identifier;
+            newTrans.TotalPrice = tprice;
+            newTrans.TotalTime = tprepTime;
+            newTrans.TransactDate = DateTime.Now.ToString("MM-dd-yyyy hh:mm:ss");
+            newTrans.Address = address;
+            newTrans.Status = "PENDING";
+            newTrans.items = _context.OrderObject.Where(s => s.Username == username).Where(s => s.Identifier == identifier).ToArray();
+
+            await TransactRepository<Transaction>.CreateItemAsync(newTrans);
+
+            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
+            {
+                ViewBag.user = HttpHelper.HttpContext.Session.GetString("currentUser");
+                ViewBag.identifier = HttpHelper.HttpContext.Session.GetString("identifier");
+
+                String user = HttpHelper.HttpContext.Session.GetString("currentUser");
+                String identifier2 = HttpHelper.HttpContext.Session.GetString("identifier");
+
+                OrderObject[] DeleteList = _context.OrderObject.Where(s => s.Username == user).Where(s => s.Identifier == identifier).ToArray();
+
+                foreach( OrderObject i in DeleteList)
+                {
+                    var Obj = await _context.OrderObject.FindAsync(i.ID);
+                    _context.OrderObject.Remove(Obj);
+                    await _context.SaveChangesAsync();
+                }
+            }
+
+            return RedirectToAction("Index", "Dishes");
+        }
+        
     }
 }

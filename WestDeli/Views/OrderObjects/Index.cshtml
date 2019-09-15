@@ -74,17 +74,20 @@
                     </td>
                 </tr>
             }
+
         </tbody>
+
         <tfoot>
             <tr style="text-emphasis-color:yellow">
                 <td>Total</td>
-                <td>RM @Model.Sum(i => i.Price * i.Portion)</td>
-                <td>@Model.Max(i => i.PrepTime) minutes</td>
+                <td>RM @Model.Select(i => i.Price * i.Portion).DefaultIfEmpty(0).Sum()</td>
+                <td>@Model.Select(i=> i.PrepTime).DefaultIfEmpty(0).Sum() minutes</td>
             </tr>
         </tfoot>
+
     </table>
 
-    <a asp-action="" asp-route-id="" class="ml-2 btn btn-white btn-outline-white">Finalize Order</a>
+    <a asp-action="Finalize" asp-route-tprice="@Model.Select(i => i.Price * i.Portion).DefaultIfEmpty(0).Sum()" asp-route-tprepTime="@Model.Select(i=> i.PrepTime).DefaultIfEmpty(0).Sum() " class="ml-2 btn btn-white btn-outline-white">Finalize Order</a>
 
     <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" /><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
 

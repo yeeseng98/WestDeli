@@ -22,6 +22,7 @@ namespace WestDeli
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            TransactRepository<WestDeli.Models.Transaction>.Initialize();
         }
 
         public IConfiguration Configuration { get; }

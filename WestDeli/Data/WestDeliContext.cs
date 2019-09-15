@@ -17,5 +17,7 @@ namespace WestDeli.Models
         public DbSet<WestDeli.Models.Dish> Dish { get; set; }
 
         public DbSet<WestDeli.Models.OrderObject> OrderObject { get; set; }
+
+        public DbSet<WestDeli.Models.Transaction> Transaction { get; set; }
     }
 }
