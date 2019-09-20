@@ -1,5 +1,4 @@
 ﻿using System;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,6 +11,7 @@ using WestDeli.Controllers;
 using WestDeli.Models;
 using System.Diagnostics;
 using WestDeli.Helpers;
+using WestDeli.Filters;
 
 namespace WestDeli.Views.Dishes
 {
@@ -232,7 +232,6 @@ namespace WestDeli.Views.Dishes
             return _context.Dish.Any(e => e.ID == id);
         }
 
-        //add a new post method for uploading the file to the server
         [HttpPost, ActionName("Upload")]
         public async Task<IActionResult> Post([Bind("ID,DishName,Price,PrepTime,Category,Description")] Dish dish, List<IFormFile> files)
         {
@@ -286,6 +285,7 @@ namespace WestDeli.Views.Dishes
         }
 
         [HttpPost, ActionName("addToCart")]
+        [Throttle(Name = "ThrottleTest", Seconds = 3)]
         public async Task<IActionResult> addToCart(string Id, string DishName, int Price, int PrepTime, string Category, int portion)
         {
             if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)

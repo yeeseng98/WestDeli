@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WestDeli.Models;
 using WestDeli.Helpers;
+using System.Net.Http;
 
 namespace WestDeli
 {
@@ -36,6 +37,7 @@ namespace WestDeli
                 options.CheckConsentNeeded = context => false;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(

@@ -10,6 +10,8 @@ using System.Linq.Expressions;
 using System.Net;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Polly;
+using System.Net.Http;
 
 namespace WestDeli
 {
@@ -19,22 +21,29 @@ namespace WestDeli
         private static readonly string CollectionId = "Items";
         private static DocumentClient client;
 
-        public static void Initialize() {
+        public static void Initialize()
+        {
             var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json");
-            IConfigurationRoot Configuration = builder.Build(); client = new DocumentClient(new Uri(Configuration["Setting1:url"]), 
+            IConfigurationRoot Configuration = builder.Build(); client = new DocumentClient(new Uri(Configuration["Setting1:url"]),
                 Configuration["Setting1:key"]);
             CreateDatabaseIfNotExistsAsync().Wait();
             CreateCollectionIfNotExistsAsync().Wait();
         }
 
-        private static async Task CreateDatabaseIfNotExistsAsync() {
-            try {
+        private static async Task CreateDatabaseIfNotExistsAsync()
+        {
+            try
+            {
                 await client.ReadDatabaseAsync(UriFactory.CreateDatabaseUri(DatabaseId));
             }
-            catch (DocumentClientException e) {
-                if (e.StatusCode == System.Net.HttpStatusCode.NotFound) {
+            catch (DocumentClientException e)
+            {
+                if (e.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
                     await client.CreateDatabaseAsync(
-                    new Database { Id = DatabaseId }); } else { throw; }
+                    new Database { Id = DatabaseId });
+                }
+                else { throw; }
             }
         }
 
@@ -47,13 +56,14 @@ namespace WestDeli
             catch (DocumentClientException e) { if (e.StatusCode == System.Net.HttpStatusCode.NotFound) { await client.CreateDocumentCollectionAsync(UriFactory.CreateDatabaseUri(DatabaseId), new DocumentCollection { Id = CollectionId }, new RequestOptions { OfferThroughput = 1000 }); } else { throw; } }
         }
 
-        public static async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T,bool>> predicate)
+        public static async Task<IEnumerable<T>> GetItemsAsync(Expression<Func<T, bool>> predicate)
         {
             IDocumentQuery<T> query = client.CreateDocumentQuery<T>(
-                UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId))
-                .Where(predicate)
-                .AsDocumentQuery();
+            UriFactory.CreateDocumentCollectionUri(DatabaseId, CollectionId))
+            .Where(predicate)
+            .AsDocumentQuery();
             List<T> results = new List<T>();
+
             while (query.HasMoreResults)
             {
                 results.AddRange(await query.ExecuteNextAsync<T>());
@@ -91,7 +101,8 @@ namespace WestDeli
             }
         }
 
-        public static async Task<Document> DeleteItemAsync(string id) {
+        public static async Task<Document> DeleteItemAsync(string id)
+        {
             return await client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(DatabaseId, CollectionId, id));
         }
     }

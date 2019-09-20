@@ -12,6 +12,8 @@ using WestDeli.Models;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using WestDeli.Helpers;
+using Polly;
+using System.Net.Http;
 
 namespace WestDeli.Controllers
 {
@@ -34,7 +36,7 @@ namespace WestDeli.Controllers
             return storageaccount;
         }
 
-        public ActionResult AddUser(UserEntity user)
+        public async Task<ActionResult> AddUser(UserEntity user)
         {
             UserEntity newUser = new UserEntity(user.Username, user.Password);
             newUser.Username = user.Username;
@@ -60,10 +62,24 @@ namespace WestDeli.Controllers
 
             try
             {
-                TableOperation insertoperation = TableOperation.Insert(newUser);
-                TableResult result = table.ExecuteAsync(insertoperation).Result;
-                ViewBag.TableName = table.Name;
-                ViewBag.result = result.HttpStatusCode; //status of your process = 204
+                var maxRetryAttempts = 2;
+                var pauseBetweenFailures = TimeSpan.FromSeconds(2);
+
+                var retryPolicy = Policy
+                    .Handle<Exception>()
+                    .WaitAndRetryAsync(maxRetryAttempts, i => pauseBetweenFailures);
+
+                int attempting = 0;
+
+                await retryPolicy.ExecuteAsync(async () =>
+                {
+                    attempting++;
+                    Debug.WriteLine("ATTEMPTS: " + attempting.ToString());
+                    TableOperation insertoperation = TableOperation.Insert(newUser);
+                    TableResult result = table.ExecuteAsync(insertoperation).Result;
+                    ViewBag.TableName = table.Name;
+                    ViewBag.result = result.HttpStatusCode; //status of your process = 204
+                });
             }
             catch (Exception ex)
             {
@@ -107,6 +123,7 @@ namespace WestDeli.Controllers
 
             try
             {
+
                 TableOperation retrieveOperation = TableOperation.Retrieve<UserEntity>(username, password);
                 TableResult retrievedResult = table.ExecuteAsync(retrieveOperation).Result;
 

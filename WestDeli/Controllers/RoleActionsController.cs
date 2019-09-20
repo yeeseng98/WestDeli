@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using WestDeli.Models;
 using Microsoft.AspNetCore.Http;
 using WestDeli.Helpers;
+using WestDeli.Filters;
+using Polly;
 
 namespace WestDeli.Controllers
 {
@@ -49,6 +51,7 @@ namespace WestDeli.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Throttle(Name = "ThrottleTest", Seconds = 60)]
         public async Task<IActionResult> Create([Bind("Username, Password, LastName, FirstName, Email, CreditNum, Gender, Age, IdentityNumber")] UserEntity user)
         {
 
@@ -68,7 +71,7 @@ namespace WestDeli.Controllers
 
                 TablesController table = new TablesController();
 
-                table.AddUser(newUser);
+                await table.AddUser(newUser);
 
                 return RedirectToAction("Index", "Dishes");
             }
