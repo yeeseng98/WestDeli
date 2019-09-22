@@ -27,7 +27,7 @@ namespace WestDeli.Views.Dishes
         }
 
         // GET: Dishes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string category)
         {
             if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
             {
@@ -38,7 +38,19 @@ namespace WestDeli.Views.Dishes
             {
                 ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
             }
+
+            if (!String.IsNullOrEmpty(category))
+            {
+
+                return View(await _context.Dish.Where(b => b.Category == category).ToListAsync());
+            }
+
             return View(await _context.Dish.ToListAsync());
+        }
+
+        public async Task<ActionResult> Filter(string ccategory)
+        {
+            return View("Index", new { category = ccategory });
         }
 
         // GET: Dishes/Details/5
@@ -68,6 +80,22 @@ namespace WestDeli.Views.Dishes
             }
 
             ViewBag.portionCount = 1;
+
+            ViewBag.hasPending = false;
+
+
+            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
+            {
+                string user = HttpHelper.HttpContext.Session.GetString("currentUser");
+                string identifier = HttpHelper.HttpContext.Session.GetString("identifier");
+                var pendingOrder = await TransactRepository<Transaction>.GetItemsAsync(d => d.Username == user && d.Identifier == identifier && d.Status == "PENDING");
+
+                if (pendingOrder.Count() > 0)
+                {
+                    ViewBag.hasPending = true;
+                }
+            }
+
             return View(dish);
         }
 
@@ -288,6 +316,8 @@ namespace WestDeli.Views.Dishes
         [Throttle(Name = "ThrottleTest", Seconds = 3)]
         public async Task<IActionResult> addToCart(string Id, string DishName, int Price, int PrepTime, string Category, int portion)
         {
+            ViewBag.hasPending = false;
+
             if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
             {
                 String username = HttpHelper.HttpContext.Session.GetString("currentUser");

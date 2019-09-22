@@ -26,6 +26,7 @@ namespace WestDeli.Views.Transactions
             }
 
             var items = await TransactRepository<Transaction>.GetItemsAsync(d => d.Status == "PENDING");
+
             return View(items);
         }
 

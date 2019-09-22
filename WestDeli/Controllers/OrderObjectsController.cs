@@ -25,6 +25,13 @@ namespace WestDeli.Views
         // GET: OrderObjects
         public async Task<IActionResult> Index()
         {
+            ViewBag.hasPending = false;
+
+            if (HttpHelper.HttpContext.Session.GetString("role") != null)
+            {
+                ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
+            }
+
             if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
             {
                 ViewBag.user = HttpHelper.HttpContext.Session.GetString("currentUser");
@@ -33,8 +40,21 @@ namespace WestDeli.Views
                 String user = HttpHelper.HttpContext.Session.GetString("currentUser");
                 String identifier = HttpHelper.HttpContext.Session.GetString("identifier");
 
-                return View(await _context.OrderObject.Where(s => s.Username == user).Where(s => s.Identifier == identifier).ToListAsync());
+                var items = await TransactRepository<Transaction>.GetItemsAsync(d => d.Username == user && d.Identifier == identifier && d.Status == "PENDING");
 
+                if (items.Count() > 0)
+                {
+                    ViewBag.hasPending = true;
+                    foreach (var i in items)
+                    {
+                        ViewBag.currentOrder = i.TransactDate;
+                        ViewBag.user = i.Username;
+                        ViewBag.price = i.TotalPrice;
+                        ViewBag.time = i.TotalTime;
+                    }
+                }
+
+                return View(await _context.OrderObject.Where(s => s.Username == user).Where(s => s.Identifier == identifier).ToListAsync());
             }
 
             return View();
@@ -51,11 +71,6 @@ namespace WestDeli.Views
             if (HttpHelper.HttpContext.Session.GetString("role") != null)
             {
                 ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
-            }
-
-            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
-            {
-                ViewBag.username = HttpHelper.HttpContext.Session.GetString("currentUser");
             }
 
             ViewBag.tprice = tprice;

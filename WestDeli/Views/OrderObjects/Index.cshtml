@@ -27,67 +27,84 @@
 <h2>Order Cart</h2>
 
 <body>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.DishName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Price)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.PrepTime)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Category)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Portion)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+    @if (!ViewBag.hasPending)
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DishName)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Price)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PrepTime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Category)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Portion)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID"><span class="glyphicon glyphicon-pencil"></span></a>
-                        &nbsp; &nbsp; &nbsp;
-                        <a asp-action="Delete" asp-route-id="@item.ID"><span class="glyphicon glyphicon-remove"></span></a>
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DishName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Price)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PrepTime)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Category)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Portion)
+                    </th>
+                    <th></th>
                 </tr>
-            }
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DishName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PrepTime)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Portion)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ID"><span class="glyphicon glyphicon-pencil"></span></a>
+                            &nbsp; &nbsp; &nbsp;
+                            <a asp-action="Delete" asp-route-id="@item.ID"><span class="glyphicon glyphicon-remove"></span></a>
+                        </td>
+                    </tr>
+                }
 
-        </tbody>
+            </tbody>
 
-        <tfoot>
-            <tr style="text-emphasis-color:yellow">
-                <td>Total</td>
-                <td>RM @Model.Select(i => i.Price * i.Portion).DefaultIfEmpty(0).Sum()</td>
-                <td>@Model.Select(i=> i.PrepTime).DefaultIfEmpty(0).Sum() minutes</td>
-            </tr>
-        </tfoot>
+            <tfoot>
+                <tr style="text-emphasis-color:yellow">
+                    <td>Total</td>
+                    <td>RM @Model.Select(i => i.Price * i.Portion).DefaultIfEmpty(0).Sum()</td>
+                    <td>@Model.Select(i => i.PrepTime).DefaultIfEmpty(0).Sum() minutes</td>
+                </tr>
+            </tfoot>
 
-    </table>
+        </table>
+        @if (Model.Count() > 0)
+        {
+            <a asp-action="Finalize" asp-route-tprice="@Model.Select(i => i.Price * i.Portion).DefaultIfEmpty(0).Sum()" asp-route-tprepTime="@Model.Select(i => i.PrepTime).DefaultIfEmpty(0).Sum() " class="ml-2 btn btn-white btn-outline-white">Finalize Order</a>
+        }
+    }
 
-    <a asp-action="Finalize" asp-route-tprice="@Model.Select(i => i.Price * i.Portion).DefaultIfEmpty(0).Sum()" asp-route-tprepTime="@Model.Select(i=> i.PrepTime).DefaultIfEmpty(0).Sum() " class="ml-2 btn btn-white btn-outline-white">Finalize Order</a>
+    @if (ViewBag.hasPending)
+    {
+        <p>You have a pending order, the order must be verified as complete before you can place another order.</p>
+        <br>
+
+        <p>Current Order: @ViewBag.currentOrder</p>
+        <p>Username: @ViewBag.user</p>
+        <p>Total Price: @ViewBag.price</p>
+        <p>Total Time: @ViewBag.time</p>
+    }
+
 
     <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee" /><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00" /></svg></div>
 
