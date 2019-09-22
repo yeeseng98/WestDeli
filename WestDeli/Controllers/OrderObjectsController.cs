@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Polly;
 using WestDeli.Helpers;
 using WestDeli.Models;
 
@@ -108,8 +109,16 @@ namespace WestDeli.Views
         [HttpPost]
         public async Task<IActionResult> addOrder(OrderObject orderObject)
         {
+            var breakerPolicy = Policy
+                .Handle<Exception>()
+                .CircuitBreakerAsync(2, TimeSpan.FromSeconds(10));
             _context.Add(orderObject);
-            await _context.SaveChangesAsync();
+
+            await breakerPolicy.ExecuteAsync(async () =>
+            { 
+                await _context.SaveChangesAsync();
+            });
+
             return View();
         }
 

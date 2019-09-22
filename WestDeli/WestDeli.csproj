@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="App.Metrics.AspNetCore.Health" Version="2.1.0" />
+    <PackageReference Include="App.Metrics.Health.Checks.Http" Version="2.1.0" />
+    <PackageReference Include="App.Metrics.Health.Checks.Network" Version="2.1.0" />
+    <PackageReference Include="App.Metrics.Health.Checks.Process" Version="2.1.0" />
+    <PackageReference Include="App.Metrics.Health.Checks.Sql" Version="2.1.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
