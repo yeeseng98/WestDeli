@@ -114,6 +114,46 @@ namespace WestDeli.Controllers
             return View();
         }
 
+        public List<UserEntity> GetAllUsers()
+        {
+            CloudStorageAccount storage = addconnection();
+            //refer which table/ create which table
+            CloudTableClient tableclient = storage.CreateCloudTableClient();
+            CloudTable table = tableclient.GetTableReference("UserTable");
+
+            TableQuery<UserEntity> query = new TableQuery<UserEntity>();
+
+            List<UserEntity> users = new List<UserEntity>();
+            TableContinuationToken token = null;
+            do
+            {
+                TableQuerySegment<UserEntity> resultSegment = table.ExecuteQuerySegmentedAsync(query, token).Result;
+                token = resultSegment.ContinuationToken;
+
+                foreach (UserEntity user in resultSegment.Results)
+                {
+                    users.Add(user);
+                }
+            }
+            while (token != null);
+
+            return users;
+        }
+
+        public ActionResult DeleteUser(string partitionKey, string rowKey)
+        {
+            CloudStorageAccount storage = addconnection();
+            //refer which table/ create which table
+            CloudTableClient tableclient = storage.CreateCloudTableClient();
+            CloudTable table = tableclient.GetTableReference("UserTable");
+
+            TableOperation deleteOp = TableOperation.Delete(new UserEntity(partitionKey, rowKey) { ETag = "*" });
+
+            TableResult result = table.ExecuteAsync(deleteOp).Result;
+            
+            return View();
+        }
+
         public Boolean GetUser(string username, string password)
         {
             CloudStorageAccount storage = addconnection();

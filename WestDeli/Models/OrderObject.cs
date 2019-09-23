@@ -40,6 +40,7 @@ namespace WestDeli.Models
         public string Category { get; set; }
 
         [Required(ErrorMessage = "Dish portion is required")]
+        [Range(1, 10, ErrorMessage = "This field must be a number")]
         public int Portion { get; set; }
     }
 }

@@ -32,14 +32,20 @@ namespace WestDeli.Views.Transactions
 
         public async Task<ActionResult> History()
         {
-            if (HttpHelper.HttpContext.Session.GetString("currentUser") != null)
-            {
-                ViewBag.user = HttpHelper.HttpContext.Session.GetString("currentUser");
-            }
 
-            if (HttpHelper.HttpContext.Session.GetString("role") != null)
+            if (HttpHelper.HttpContext.Session.GetString("role") != null && HttpHelper.HttpContext.Session.GetString("currentUser") != null)
             {
                 ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
+                ViewBag.user = HttpHelper.HttpContext.Session.GetString("currentUser");
+
+                if (HttpHelper.HttpContext.Session.GetString("role") == "Customer")
+                {
+                    string user = HttpHelper.HttpContext.Session.GetString("currentUser");
+                    string identifier = HttpHelper.HttpContext.Session.GetString("identifier");
+                    var privateItems = await TransactRepository<Transaction>.GetItemsAsync(d => d.Status == "COMPLETE" && d.Username == user && d.Identifier == identifier);
+
+                    return View(privateItems);
+                }
             }
 
             var items = await TransactRepository<Transaction>.GetItemsAsync(d => d.Status == "COMPLETE");

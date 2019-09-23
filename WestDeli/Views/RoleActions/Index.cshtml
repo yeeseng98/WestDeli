@@ -1,0 +1,63 @@
+﻿@model IEnumerable<WestDeli.Models.UserEntity>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>User List</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RegisterDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreditNum)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Age)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastLogin)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RegisterDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreditNum)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Age)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastLogin)
+            </td>
+            <td>
+                <a asp-action="Delete" asp-route-user="@item.Username" asp-route-identifier="@item.Password" class="ml-2 btn btn-white btn-outline-white" onclick="return confirm('Are you sure you want to remove this user permanently?')">Remove</a>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="History" class="ml-2 btn btn-white btn-outline-white">View All Completed Transactions</a>

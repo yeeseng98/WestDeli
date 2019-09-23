@@ -26,7 +26,11 @@ namespace WestDeli.Controllers
                 ViewBag.role = HttpHelper.HttpContext.Session.GetString("role");
             }
 
-            return View();
+            TablesController table = new TablesController();
+
+            List<UserEntity> users = table.GetAllUsers();
+
+            return View(users);
         }
 
         public IActionResult Login()
@@ -104,6 +108,14 @@ namespace WestDeli.Controllers
             HttpHelper.HttpContext.Session.Clear();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> Delete(string user, string identifier)
+        {
+            TablesController table = new TablesController();
+            table.DeleteUser(user, identifier);
+
+            return RedirectToAction("Index", "RoleActions");
         }
     }
 }
