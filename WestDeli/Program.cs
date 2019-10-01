@@ -45,8 +45,10 @@ namespace WestDeli
                 // Check that the current amount of physical memory in bytes is below a threshold
                 builder.HealthChecks.AddProcessPhysicalMemoryCheck("Working Set", 1000000000);
                 // Check connectivity to the site with a "ping", passes if the result is `IPStatus.Success`
-                builder.HealthChecks.AddPingCheck("Site Ping", "https://localhost:44395/", TimeSpan.FromSeconds(10));               
-                builder.HealthChecks.AddHttpGetCheck("Azure Storage Check", new Uri("https://westdelistorage.blob.core.windows.net/image-blob-container/20160801-sous-vide-brisket-guide-35-1500x1125.jpg"), TimeSpan.FromSeconds(10));
+                builder.HealthChecks.AddPingCheck("Site Ping", "http://westdeli20190928063210.azurewebsites.net", TimeSpan.FromSeconds(10));               
+                builder.HealthChecks.AddHttpGetCheck("Azure Storage Check", 
+                    new Uri("https://westdelistorage.blob.core.windows.net/image-blob-container/20160801-sous-vide-brisket-guide-35-1500x1125.jpg")
+                    , TimeSpan.FromSeconds(10));
                 builder.HealthChecks.AddCheck("DatabaseConnected",
                     () => DBCheck());
                 })

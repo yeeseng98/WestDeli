@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics;
 
 namespace WestDeli.Controllers
 {
@@ -19,21 +20,17 @@ namespace WestDeli.Controllers
         //this method used to add the container information
         private CloudBlobContainer GetCloudBlobContainer()
         {
-            //1. access the appsetting.json to get the access information
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json");
 
             IConfiguration Configuration = builder.Build();
 
-            //2. access the appsetting.json to get the access key
             CloudStorageAccount storageAccount =
                 CloudStorageAccount.Parse(Configuration["ConnectionStrings:westdelistorage_AzureStorageConnectionString"]);
 
-            //3. start to create an client object to connect the account
             CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
 
-            //4. provide container name that the client need to access
             CloudBlobContainer container = blobClient.GetContainerReference("image-blob-container");
 
             return container;
@@ -55,21 +52,15 @@ namespace WestDeli.Controllers
         //    return View();
         //}
 
-        //action 2: upload the file to the blob storage
         public string UploadBlob(IFormFile formFile, string path)
         {
-            //2.1. call back the above getcloudblobcontainer() method
             CloudBlobContainer container = GetCloudBlobContainer();
 
-            //2.2 mention what is the name should be store for the file
             CloudBlockBlob blob = container.GetBlockBlobReference(formFile.FileName);
 
-            //2.3 state the location of the sourcefile
-            //read and send the file to the blob storage
             using (Stream stream = formFile.OpenReadStream())
             {
                 stream.Position = 0;
-                //cope the content to the blob name blob.jpg
                 blob.UploadFromStreamAsync(stream).Wait();
             }
             return "Already send the file to blob storage!";
@@ -107,26 +98,26 @@ namespace WestDeli.Controllers
             return View(blobs);
         }
 
-        public string DownloadBlob(string item)
-        {
-            try
-            {
-                CloudBlobContainer container = GetCloudBlobContainer();
-                CloudBlockBlob blob = container.GetBlockBlobReference(item);
+        //public string DownloadBlob(string item)
+        //{
+        //    try
+        //    {
+        //        CloudBlobContainer container = GetCloudBlobContainer();
+        //        CloudBlockBlob blob = container.GetBlockBlobReference(item);
 
-                using (var fileStream = System.IO.File.OpenWrite(@"C:\Users\Acer\Desktop\" + item))
-                {
-                    blob.DownloadToStreamAsync(fileStream).Wait();
-                }
-                return "Success!";
-            }
-            catch (Exception ex)
-            {
-                return "Failure!" + ex;
-            }
-        }
+        //        using (var fileStream = System.IO.File.OpenWrite(@"C:\Users\Acer\Desktop\" + item))
+        //        {
+        //            blob.DownloadToStreamAsync(fileStream).Wait();
+        //        }
+        //        return "Success!";
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return "Failure!" + ex;
+        //    }
+        //}
 
-        public string DeleteBlob(string item)
+        public void DeleteBlob(string item)
         {
             try
             {
@@ -134,11 +125,10 @@ namespace WestDeli.Controllers
                 CloudBlockBlob blob = container.GetBlockBlobReference(item);
 
                 blob.DeleteAsync().Wait();
-                return "Success";
             }
             catch (Exception ex)
             {
-                return "Failure!" + ex;
+                Debug.WriteLine(ex);
             }
         }
     }

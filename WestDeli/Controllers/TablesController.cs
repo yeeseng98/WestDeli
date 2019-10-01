@@ -63,7 +63,7 @@ namespace WestDeli.Controllers
             try
             {
                 var maxRetryAttempts = 2;
-                var pauseBetweenFailures = TimeSpan.FromSeconds(2);
+                var pauseBetweenFailures = TimeSpan.FromSeconds(10);
 
                 var retryPolicy = Policy
                     .Handle<Exception>()

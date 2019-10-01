@@ -95,7 +95,7 @@
                     string imageString = item.ImgLink;
                     <div class="col-lg-4 d-flex ftco-animate">
                         <div class="services-wrap d-flex">
-                            <a asp-action="Details" asp-route-id="@item.ID" class="img" style="background-image: url(@imageString), url(@Url.Content("~/images/pizza-1.jpg")),url(images/pizza-1.jpg);"></a>
+                            <a asp-action="Details" asp-route-id="@item.ID" class="img" style="background-image: url(@imageString), url(images/pizza-1.jpg), url(@Url.Content("~/images/pizza-1.jpg"));"></a>
                             <div class="text p-4">
                                 <h3>@Html.DisplayFor(modelItem => item.DishName)</h3>
                                 <p>@Html.DisplayFor(modelItem => item.Description)</p>
